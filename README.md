@@ -1,4 +1,4 @@
-# AI Mock Interview Platform
+# prep.ai — AI Mock Interview Platform
 
 An AI-first prototype featuring a **3-Agent Multi-Agent System** that runs realistic, adaptive, and highly observant mock interviews for job candidates and delivers structured, high-value coaching feedback at the end. 
 
@@ -71,38 +71,38 @@ The visual dashboard features direct integration with browser native multimedia 
 
 The system utilizes a 3-agent orchestration pattern coordinated by the backend server `main.py`. Instead of executing prompts in a simple pipeline, the backend runs a **real-time evaluation loop** on each conversational turn to feed context to the interviewer.
 
-```
-                    +------------------------------------+
-                    |        Candidate / Frontend        |
-                    +-----------------+------------------+
-                                      |
-                       (Start Session | Chat Message)
-                                      v
-                    +------------------------------------+
-                    |       Orchestrator (main.py)       |
-                    +--------+------------------+--------+
-                             |                  |
-              (Turns < 5)    |                  | (Turn >= 5)
-                             v                  v
-                 +-------------------+  +-------------------+
-                 |  Evaluator Agent  |  |  Evaluator Agent  |
-                 |  (evaluate_turn)  |  | (evaluate_final)  |
-                 +---------+---------+  +---------+---------+
-                           |                      |
-                   (JSON   |                      | (Overall Metrics
-                  Feedback)|                      |  JSON Matrix)
-                           v                      v
-                 +-------------------+  +-------------------+
-                 | Interviewer Agent |  |    Coach Agent    |
-                 |  (get_next_q)     |  | (generate_feedbk) |
-                 +---------+---------+  +---------+---------+
-                           |                      |
-                    (Next  |                      | (Actionable
-                   Question|                      |  Markdown)
-                           v                      v
-                    +------------------------------------+
-                    |  Return to Candidate / Frontend    |
-                    +------------------------------------+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Candidate as 🧑‍💻 Candidate
+    participant FE as 🖥️ Next.js Frontend (Voice & UI Engine)
+    participant API as ⚙️ FastAPI Orchestrator (main.py)
+    participant EV as 🧠 Evaluator Agent (evaluator.py)
+    participant IV as 🎙️ Interviewer Agent (interviewer.py)
+    participant CO as 📈 Coach Agent (coach.py)
+
+    Note over Candidate, FE: Turn Loop (Turns 1 - 4)
+    Candidate->>FE: Speaks response (Microphone / webkitSpeechRecognition)
+    FE->>FE: Transcribes Audio to Text in Input Box
+    FE->>API: POST /api/chat {messages, role, focus}
+    API->>EV: Runs evaluate_turn(history)
+    EV-->>API: Returns turn evaluation JSON {performance, critique, suggested_action}
+    API->>IV: Runs get_next_question(history, turn_evaluation)
+    IV-->>API: Returns next tailored question (text)
+    API-->>FE: Returns {finished: false, text}
+    FE->>FE: Speaks question aloud (TTS / window.speechSynthesis)
+    FE-->>Candidate: Hears question & prepares response
+
+    Note over Candidate, FE: Final Turn Completion (Turn >= 5)
+    Candidate->>FE: Submits final response
+    FE->>API: POST /api/chat {messages}
+    API->>EV: Runs evaluate_final(history)
+    EV-->>API: Returns final JSON matrix {scores, justification}
+    API->>CO: Runs generate_feedback(history, matrix)
+    CO-->>API: Returns detailed Career Feedback Report (Markdown)
+    API-->>FE: Returns {finished: true, matrix, feedback_markdown}
+    FE->>FE: Plays concluding TTS notification
+    FE-->>Candidate: Renders Interactive Metrics Dashboard and Coaching Report!
 ```
 
 ### The 3 Agents

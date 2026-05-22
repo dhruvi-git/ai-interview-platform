@@ -14,7 +14,7 @@ def main():
         return
 
     print("====================================================")
-    print("Welcome to G.TAKE // DRILL COACH (CLI Edition)")
+    print("Welcome to prep.ai (CLI Edition)")
     print("====================================================")
     
     role = input("Enter target role (e.g., Frontend Engineer Intern): ").strip()

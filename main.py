@@ -13,7 +13,7 @@ from agents.coach import CoachAgent
 
 load_dotenv()
 
-app = FastAPI(title="AI Mock Interview Coach Server")
+app = FastAPI(title="prep.ai Server")
 
 app.add_middleware(
     CORSMiddleware,

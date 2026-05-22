@@ -241,7 +241,7 @@ export default function MockInterviewDashboard() {
             <Sparkles className="w-5 h-5 text-blue-400" />
           </div>
           <h1 className="text-lg md:text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent tracking-tight">
-            G.TAKE <span className="text-blue-400 text-xs font-mono ml-1 font-normal">// DRILL COACH</span>
+            prep<span className="text-blue-400 font-mono ml-0.5 font-semibold">.ai</span>
           </h1>
         </div>
         <div className="text-xs text-slate-400 border border-slate-800 bg-slate-900/30 px-3 py-1.5 rounded-full backdrop-blur-md flex items-center gap-2">
